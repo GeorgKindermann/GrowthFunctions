@@ -1,0 +1,1001 @@
+%pdflatex heightCurveFunctions
+%bibtex heightCurveFunctions
+
+\documentclass[a4paper,twocolumn]{article}
+%\usepackage[top=35pt,bottom=35pt,left=48pt,right=46pt]{geometry}
+\usepackage[top=10pt,bottom=10pt,left=10pt,right=10pt]{geometry}
+%\linespread{1.9}
+%\nolinenumbers
+%\usepackage{lineno}
+%\linenumbers
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{palatino}
+
+\usepackage{natbib}
+\usepackage{url}
+
+\allowdisplaybreaks
+
+%\DOI{xxxxx}
+
+%\Year{2016}
+
+\DeclareMathOperator{\atan}{atan}
+
+\begin{document}
+
+\title{Evaluation of growth functions for tree height modelling\\
+Vergleich von H\"ohenzuwachsfunktionen}
+%\title{Comparison of growth functions on observed tree height increments}
+
+%\author[Evaluation of growth functions for tree height modelling]{Georg Erich \surname{Kindermann}$^{1,\ast}$}
+\author{Georg Erich Kindermann}
+
+%\address{$^{1}$Austrian Research and Training Centre for Forests, Natural Hazards and Landscape, Seckendorff-Gudent-Weg 8, 1131 Vienna, Austria}
+
+%\corres{$^{\ast}$Corresponding author. E-mail: georg.kindermann@bfw.gv.at}
+
+%\date{\rec{4 April 2016}}
+
+\maketitle
+
+Keywords: Growth function, Tree height, Site index curves, Growth model\\
+Schlagworte: Zuwachsfunktion, Baumh\"ohe, Oberh\"ohenkurven, Wachstumsmodell
+
+\begin{abstract}
+  Several growth functions (e.g. Backman, Bertalanffy,
+  Evolon, Fischer, Gomperz, Gram, Grosenbaugh, Hassell, Hill,
+  Ho{\ss}feld, Hyperlogistic, Johnson, Koller, Korf, Kosun, K\"ovessi,
+  Kumaraswamy, Levakovic, Logit, Maynard, Michaelis-Menten, Michailoff,
+  Mitscherlich, Morgan, Nelder, Peschel, Richards, Ricker, Robertson,
+  Schnute, Schumacher, Siven, Sloboda, Strand, Stannard, Terazaki,
+  Thomasius, Todorovic, Yoshida, Weber, Weilbull) have been compared
+  for their ability to follow observed height developments. Those with
+  two coefficients might not be flexible enough to follow possible
+  growth patterns. Some functions with three and especially those with
+  four parameters can follow a wide range of growth patterns. The
+  differences between most of the four parameter functions are
+  marginal. Choosing one can depend on their behaviour to converge
+  during parameterisation or the direct interpretability of the
+  parameters selection. Overall the function \texttt{h = c0 * (ln(1 +
+    c2 * t**c3))**c1}
+  %$h = c_0 \cdot \ln^{c_1} (1 + c_2\cdot t^{c_3})$
+  showed good behaviour and might be one which could be recommended.\\
+\vskip1pt
+\end{abstract}
+
+\begin{center}
+  Zusammenfassung
+\end{center}
+Es wurden einige Wachstumsfunktionen (z.B.\ Backman, Bertalanffy,
+Evolon, Fischer, Gomperz, Gram, Grosenbaugh, Hassell, Hill,
+Ho{\ss}feld, Hyperlogistic, Johnson, Koller, Korf, Kosun, K\"ovessi,
+Kumaraswamy, Levakovic, Logit, Maynard, Michaelis-Menten, Michailoff,
+Mitscherlich, Morgan, Nelder, Peschel, Richards, Ricker, Robertson,
+Schnute, Schumacher, Siven, Sloboda, Strand, Stannard, Terazaki,
+Thomasius, Todorovic, Yoshida, Weber, Weilbull) hinsichtlich ihrer
+F\"ahigkeit, beobachtete H\"ohenwachstumsverl\"aufe zu beschreiben,
+verglichen. Jene mit zwei Koeffizienten sind zu unflexibel um das
+Spektrum an m\"oglichen Wachstumsverl\"aufen abzudecken. Funktionen mit
+drei und insbesondere jene mit vier Koeffizienten k\"onnen ein breites
+Spektrum an Wachtumsverl\"aufen abdecken. Die Unterschiede zwischen den
+meisten Vierparameterfunktionen sind minimal, wodurch deren Auswahl
+auf andere Kriterien, wie Konvergierfreudigkeit oder direkte
+Interpretierbarkeit der Parameter, verlagert werden kann. Generell
+zeigte die Funktion \texttt{h = c0 * (ln(1 + c2 * t**c3))**c1} gute
+Resultate und kann zur Beschreibung von H\"ohenverl\"aufen empfohlen
+werden.
+
+
+\section{Introduction}
+
+Site index curves are used to estimate the productivity of a forest at
+a specific site. In the past those curves have been drawn
+freehand. Later, averages for specific site and age classes have been
+calculated and the resulting points have been connected. Nowadays
+those curves are typically drawn by using a function. This function
+should be flexible enough to reproduce the variety of observed height
+growth patterns. In this article established functions are compared
+as to how well they fit to observed height developments over time.
+
+In the past many growth functions have been published and also several
+comparisons of some of them have been done
+\citep{Levakovic1935Bestandeshoehenkurve,peschel1938Wachstumsgesetze,todorovic1961GesetzmaessigkeitenDesWachstums,zeide1993AnalysisOfGrowthEquations,ricker1979GrowthRatesAndModels,elfving1997ConstructionOfSiteIndexEquations,zhang1997GrowthFunctions,chrobok2004DescriptiveGrowthModelOfTheHeightOfStapesInTheFetus,palahi2004SiteIndex,Khamis2005NonlinerGrowthModels,upadhyay2005SiteIndexEquations,koyo2013GeneralizedMathematicalModelForBiologicalGrowths,kutelka2015KORFitAnEfficientGrowthFunctionFittingTool,sedmak2015SigmoidGrowthFunction}.
+It appears that there was a dissatisfaction with the older growth
+functions or uncertainties which one to select. For the same reasons,
+the motivation comes to write this article. It will give a collection
+of more than 50 growth functions and show how they are related to each
+other. It will show the typical root--mean--square error (RMSE), the
+bias at some
+age steps and if there is a trend over site index between observed
+tree heights and each single growth function and also how the
+parameterized growth function will predict heights over an age of
+up to 800~years.
+
+\section{Materials and methods}
+
+\subsection{Observed tree height development}
+
+Data-sets from \cite{guttenberg1915Hochgebirge} and stem analysis from
+BFW (Austrian Research and Training Centre for Forests, Natural
+Hazards and Landscape) have been used. The analysed trees
+\textit{(Picea abies)} were raised in Austria. The used trees must
+have a minimum age of 100 years and should not have been suppressed by
+higher trees. The height--age curves of these trees are used as they
+are and will not be identical with corresponding site index curves
+which are typical created by smoothing many observations of dominant
+or mean heights for many ages.
+In total, 81~trees from Guttenberg and 95~trees from BFW
+have been taken. Figure~\ref{fig:ageHeight} shows the height
+development of these trees. In the following compilation the
+distribution of age and height at the age of 50 years (h50) and
+100~years (h100) is shown.
+
+\begin{tabular}{llcccccc}
+ &Src  & Min.& 25\,\%&  50\,\%& Mean& 75\,\%& Max.\\
+ \hline
+ \multirow{2}{*}{Age}& Gut& 100.0& 120.0& 140.0& 133.2& 150.0& 150.0\\
+ & BFW& 100.0& 108.0& 129.0& 129.9& 143.0& 202.0\\[0.3em]
+ \multirow{2}{*}{h50}& Gut& 2.70& 9.30& 12.90& 13.27& 17.50& 23.20\\
+ & BFW& 5.45& 11.12& 14.84& 14.94& 19.00& 27.20\\[0.3em]
+ \multirow{2}{*}{h100}&Gut& 7.70& 17.90& 23.40& 23.51& 29.10& 37.00\\
+ & BFW& 10.97& 22.06& 24.74& 25.89& 31.08& 36.71
+\end{tabular}
+
+\begin{figure*}[htbp]
+  \centering
+  \includegraphics[height=.85\textheight]{../pic/ageHeight}
+  \caption{Height development of the trees}
+  \label{fig:ageHeight}
+  \scriptsize{The height at age~0 is shifted from tree to tree by one meter.}
+\end{figure*}
+
+
+\subsection{Growth functions}
+
+In literature many growth functions can be found. Also different
+requirements, which the function should fulfil, are stated. Returning
+a size of zero at time zero seems to be a good behaviour of the
+function. But in most cases it might be good enough if it returns
+something close to zero at time zero. Also the question arises when is
+time zero. Is it zero when the egg cell is built, when it is
+fertilised, when the seed is distributed, when the seed starts to
+germinate, \dots? There is no need that it returns a finite number at
+infinite time, no need to be asymptotic, as this time is never
+reached. It is good enough when the returned sizes at ages, which could
+be maximally reached, are still in a reasonable range. The conditions
+that the increments and also the slope of the increments at time
+zero have to be zero are questionable and could be determined by the
+observations. Also a nice behaviour is if the function returns an
+equal or larger value for an increased time. If it shows a
+peak, the size after this peak could be kept at this peak for older
+ages. Here the functions are used as they are. So no
+modifications afterwards occur.  The growth function should have an
+inflection point because height increment typically shows a maximum.
+
+Growth functions can be distinguished in functions which estimate the
+actual size at a certain point in time and functions which estimate
+the change of size at a given time or size. Those types can be
+transformed to each other by integration and differentiation
+respectively. The change of size can be estimated absolutely or relatively
+(e.g. change in percentages of current size). In the past many authors
+have done research in this field, so only a selection of popular
+functions could be made. One of the simplest equation will be the
+linear function (eq.~\ref{eq:linear}) where $h$ is the tree height,
+$t$ is the age and $c_0$ is a coefficient. Here the size is linear
+increasing with time. It will represent the lower benchmark which
+should be exceeded in most cases by all other functions. A pragmatic
+extension can be the additional use of $t^2$ like in
+function~\ref{eq:parabolar} which will show a maximum. This function
+could be extended further with some polynomials as shown in
+function~\ref{eq:poly3} and \ref{eq:poly4}. Another way to increase
+the curve flexibility can be reached by powering the age with a
+coefficient as shown in function~\ref{eq:allometric} which is
+equivalent to $h = c_0 (1 - e^{c_1 \cdot t^{-1}} )^{c_2}$.
+Polynomial and allometric can also be combined as shown in
+function~\ref{eq:polyAllo}.\\
+%
+Another way would be to use concave monotonically increasing functions
+and place exponents on possible places like shown for $\ln$ in
+function~\ref{eq:ln}, for $\atan$ in function~\ref{eq:atan} and for
+$\tanh$ in function~\ref{eq:tanh}.\\
+%
+\cite{terazaki1915GrowthCurves} introduced
+function~\ref{eq:terazaki} which was reinvented e.g.\ by
+\cite{johnson1935ATrendLineForGrowthSeries},
+\cite{Schumacher1939Function} and \cite{michailoff1943Hoehenkurven}.
+This function can be extended by adding the term $c_2\cdot
+t^{-0.5}$ as shown in function~\ref{eq:terazakiE1} or by estimating
+the exponent with a coefficient as shown in
+function~\ref{eq:terazakiE2}.
+The function of \cite{korf1939Funktion} is an extended version of
+Terazakis function as the fixed exponent $-1$ is exchanged by a
+coefficient (function~\ref{eq:korf}). Function~\ref{eq:gomperz} from
+\cite{gompertz1825} looks again similar to
+function~\ref{eq:korf}. Only the term $t^{c_2}$ is exchanged with
+$e^{c_2\times t}$.
+$h = \frac{c_0}{(1+c_1 \cdot e^{c_2 \cdot t})^{c_3}}$ 
+was published by \cite{stannard1985GrowthFunction} which produces
+quasi equivalent results like eq.\,\ref{eq:gomperz}.
+\cite{sloboda1971Wachstumsprozesse}
+again extended function~\ref{eq:gomperz} by introducing an exponent to
+$t$ which results in function~\ref{eq:sloboda}.
+\cite{grosenbaugh1965SigmoidFunction} published the function
+$h = c_0 + c_1\cdot (e^{(c_2^2 - 1)\cdot U} - c_2\cdot U)^{c_2\cdot c_3 + 1}$
+where $U$ is a function such as $U = e^{c_4\cdot t}$. His
+function is able to describe growth like a couple of other growth
+functions. This is possible by selecting specific values for some
+coefficients and using different functions for the
+parameter $U$. For instance by setting $c_2=0$, $c_0=0$ and using
+$U = c_4\cdot e^{c_5\cdot t^{c_6}}$ it will be exactly the same like
+function~\ref{eq:sloboda}. In the tested function~\ref{eq:Grosenbaugh}
+the first term was eliminated, $U = e^{c_4\cdot t^{c_5}}$ was used and
+the coefficient numbers have been reassigned.\\
+%
+Function~\ref{eq:korsun} was used by \cite{kosrun1935Funktion} which
+is similar to function~\ref{eq:backman} from
+\cite{backmann1931DasWachstumsproblem} with the difference that one
+estimates the height, the other the height increment. This function
+has been extended, as shown in function~\ref{eq:korsunE1} and
+\ref{eq:korsunE2} by adding another element to the polynomial or by
+exchanging the fixed exponent by a coefficient.\\
+%
+\cite{weber1891Forsteinrichtung} has propagated
+function~\ref{eq:weber}. \cite{weber1891Forsteinrichtung} skipped the
+first years and applied then his function. Here this function is used
+for all ages.
+\cite{puettner1920StudienUeberPhysiologischeAehnlichkeit6Wachstumsaehnlichkeiten}
+and
+\cite{bertalanffy1934UntersuchungenUeberDieGesetzlichkeitenDesWachstumsTeilI}
+have used $h = c_0 (1 - c_2 \cdot e^{c_1 \cdot t})$, which also was
+called ``monomolecular'', according to the speed of this chemical reaction.
+Tests of this function ended with the result that most of the time
+$c_2 = 1$ was estimated and in cases it was not 1 the function returns
+a height unequal zero at age zero. This function is sometimes also
+named after \cite{mitscherlich1909Bodenertrag}. There are several
+ways to extend function~\ref{eq:weber}. One is to combine some of these
+functions by multiplication as shown in function~\ref{eq:weberE1} and
+\ref{eq:weberE2}. It is also possible to add an exponent as shown in
+function~\ref{eq:weberE3}. \cite{koevessi1928ffGesetzmaessigkeiten}
+joined two functions of Weber together by adding them as shown in
+equation~\ref{eq:koevessi1}.
+\cite{koevessi1929ffGesetzmaessigkeiten4} reduced his function to a
+three coefficient form as shown in equation~\ref{eq:koevessi2}. By
+adding an exponent to Webers function, function~\ref{eq:mitscherlich}
+will be the result which was introduced by
+\cite{mitscherlich1919Pflanzenwachstum}. If this exponent is set to
+$c_2 = 3$ the function was sometimes named after ``Bertalanffy''. This
+exponent $c_2 = 3$ comes from transforming observed length into
+weight. \cite{schnute1981AVersatileGrowthModel} showed a function
+$h= (y_1^b + (y_2^b-y_1^b) \cdot \frac{1 - e^{a*(t-t_1)}} {1 - e^{a*(t_2-t_1)}})^{(1/b)}$
+which can be transferred to Mitscherlich's
+function if the two selectable ages are set to $t_1=0$ and
+$t_2=\infty$ and the sizes ($y$) at these ages are $y_1=0$ and $y_2$ gets the
+highest possible height. \cite{richards1959GrowthCurve} added to this
+function an additional factor
+$h = c_0 (1 - {c_4} \cdot e^{c_1 \cdot t} )^{c_2}$ where $c_4$
+sets the size at time zero depending on the the coefficients. Tests of this
+function ended with the result that most of the time $c_4 = 1$ was
+estimated and when it was not 1 the function returns a height
+unequal zero at age zero. \cite{chapman1931Function} also used this
+function which was then named the Chapman--Richards--Function.
+Function~\ref{eq:weber} could also be extended by adding an exponent
+to $t$ which is shown in function~\ref{eq:fischer}
+\citep{fisher1928Funktion}. In
+$h = c_0 (1 - {c_4} \cdot e^{c_1 \cdot t^{c_3}})$ the coefficient $c_4$
+is added to eq.~\ref{eq:fischer}
+which is called after Weilbull. Tests of this function ended with the
+result that $c_4 = 1$ was most of the time estimated and in cases it
+was not 1 the function returns a height unequal zero at age zero.
+%
+$h = c_0 (1 - (1 - (\frac{t}{c_3})^{c_1})^{c_2})$ was developed by
+\cite{kumaraswamy1980DensityFunction} which converges to
+eq.\,\ref{eq:fischer} if $c_3$ has high values. Coefficient estimates
+for the used data set showed high values for $c_3$ and estimates close
+to identical to those from eq.\,\ref{eq:fischer}.
+\cite{todorovic1961GesetzmaessigkeitenDesWachstums} extended this
+function type to four coefficients which leads to
+function~\ref{eq:todorovic}. Another extension of Weber's function was
+done by \cite{thomasius1964duengung} and is given in
+function~\ref{eq:thomasius}.\\
+%
+The functions~\ref{eq:hossfeld1}, \ref{eq:hossfeld3} and
+\ref{eq:hossfeld4} are from
+\cite{hossfeld1822Mathematik}. Equation~\ref{eq:hossfeld1E1} shows a
+simple extension of function~\ref{eq:hossfeld1} by adding the term
+$c_3 \cdot t^{-3}$. The function from
+\cite{morgan1975ModelForNutritionalResponse} is equivalent to
+\ref{eq:hossfeld4} and could be alternatively formulated as
+$h = \frac{c_0}{1+c_1 \cdot e^{c_2 \cdot \ln(t)}}$. Also the functions
+by
+\cite{hill1913TheCombinationOfHaemoglobinWithOxygenAndWithCarbonMonoxide}
+, \cite{michaelis1913DieKinetikDerInvertinwirkung},
+\cite{maynard1973TheStabilityOfPredatorPreySystems} or
+\cite{hassell1975DensityDependenceInSingleSpeciesPopulations} are equal
+to \ref{eq:hossfeld4}.
+\cite{yoshida1928Zuwachskurve} exchanged the term
+$c_2 \cdot t^{-2}$ from Ho{\ss}feld1 (eq.~\ref{eq:hossfeld1}) with $c_2
+\cdot t^{c_3}$ as shown in function~\ref{eq:yoschida}.
+\cite{strand1964SiteIndexCurves} has set the exponent $c_2=-1$ of
+Ho{\ss}feld4 (eq.~\ref{eq:hossfeld4}) and powered the
+denominator by 3 (eq.~\ref{eq:strand}).
+\cite{Levakovic1935Bestandeshoehenkurve} already generalised the
+function of Strand by exchanging the exponent $3$ with a coefficient
+(eq.~\ref{eq:levakovic1}) and in a further step he exchanged the
+exponent $-1$ also with a coefficient (eq.~\ref{eq:levakovic2}). This
+function was reinvented e.g.\ by
+\cite{gottschalk2005FiveParameterLogistic}.
+In this function group (eq.~\ref{eq:hossfeld3} -- \ref{eq:levakovic2})
+typically a
+division by zero at time zero is produced, so it would sometimes help
+to reform those functions.
+$h = c_0 \cdot (1 - \frac{1}{1 + c_1\cdot t^{c_2}})^{c_3}$ will
+produce the same like Levakovic159 (eq.~\ref{eq:levakovic2}) but
+avoiding the division by zero.\\
+%
+The logit function is shown in eq.~\ref{eq:logit} which is identical
+with the function by \cite{robertson1908OnTheNormalRateOfGrowth} and
+named ``autocatalytic'' as the speed of this chemical reaction can be
+described with it. The basic form of eq.~\ref{eq:logit} could be extended
+by adding an exponent to age as shown in
+eq.~\ref{eq:logitE1}. Alternatively also a polynomial could be used as shown
+in eq.~\ref{eq:logitE2} with the untransformed age or in
+eq.~\ref{eq:logitE3} with the logarithm of age. \cite{nelder1962Function}
+added an exponent to the whole denominator as shown in
+eq.~\ref{eq:nelder}.
+\\
+\cite{siven1896GrundsaetzeZurBerechnungDesHoehenwachstumsDerNadelhoelzer}
+has estimated tree height with
+ $h = h_x \cdot (\frac{t}{t_x})^{0.25\cdot \sqrt{t/t_x}}$ 
+where $h_x$ is the height at time $t_x$. A generalised form is given
+in function~\ref{eq:siven}.
+\cite{gram1879KostruktionVonZuwachsuebersichten} uses
+function~\ref{eq:gram} to estimate height over
+age which is similar to \cite{ricker1954StockAndRecruitment}.
+\cite{peschel1938Wachstumsgesetze} has formulated
+function~\ref{eq:peschel} based on some predefined assumptions.
+
+The previous functions describe the absolute size at a given time. The
+following functions describe the change of size at a given time.
+\cite{backmann1931DasWachstumsproblem} has used
+function~\ref{eq:backman} to describe also tree height growth. For
+this purpose he has used this function in a series of up to three
+functions and combined their results either by adding or by
+multiplying the sub-function results. Here this combination was not
+made. This function was extended by adding the term $\ln^4(t)$ as
+shown in equation~\ref{eq:backmanE1}. \cite{koller1886Zuwachskurven}
+has used function~\ref{eq:koller} which was extended by
+\cite{Levakovic1935Bestandeshoehenkurve} as shown in
+equation~\ref{eq:levakovicIh}.
+
+The hyperlogistic differential equation was formulated as
+$ih = c_0 \cdot (c_1 + h)^{c_2} \cdot (c_3-(c_1 + h)^{c_4})^{c_5}$
+which is based on Euler's beta function and shows the change of size
+for a given size. It is based on works by
+\cite{pearson1934tables},
+\cite{richards1959GrowthCurve},
+\cite{nelder1961GeneralizedLogisticCurv},
+\cite{blumberg1968LogisticGrowthRateFunctions},
+\cite{turner1969AGeneralizationOfTheLogisticLawOfGrowth},
+\cite{turner1976ATheoryOfGrowth} or
+\cite{buis1991LogisticGrowth}.
+It can be assumed, that only
+two of the three exponents are significant and so typically
+$c_4=1$. This function has been used by \cite{mendeAlbrecht2001} to
+describe a height curve and named the function Evolon-Model. The form
+shown in function~\ref{eq:hyperlogistic} was used for coefficient
+estimation.
+In function~\ref{eq:hyperlogistic} the coefficient $c_1$ is needed to
+allow an increment estimation different from zero when $h=0$. The same
+problem can be solved with function~\ref{eq:hyperlogisticE1}. If an
+upper limit is not needed or wanted, alternatively
+$e^{c_3 \cdot  h^{c_4}}$ can be used instead of $(1-h/c_3)^{c_4}$
+which is shown in function~\ref{eq:hyperlogisticE2} which is similar
+to the formulation of Gram (eq.~\ref{eq:gram}), Koller
+(eq.~\ref{eq:koller}) or Levakovic147 (eq.~\ref{eq:levakovicIh}). Also
+\cite{zeide1993AnalysisOfGrowthEquations} has published similar functions.
+Function~\ref{eq:hyperlogisticE3}, \ref{eq:hyperlogisticE4} and
+\ref{eq:hyperlogisticE5}
+show additional examples how the second term
+could be exchanged with $1/(1 + c_3\cdot h^{c_4})$,
+$1 - \tanh(c_3 \cdot h^{c_4})$ and
+$\frac{\pi}{2} - \atan(c_3\cdot h^{c_4})$ respectively.
+To those terms an additional exponent could be added like
+$1/(1 + c_3\cdot h^{c_4})^{c_5}$,
+$1 - \tanh^{c_5}(c_3 \cdot h^{c_4})$ and
+$\frac{\pi}{2} - \atan^{c_5}(c_3\cdot h^{c_4})$. It could also be
+tried to exchange the term $c_0 + c_1 \cdot h^{c_2}$ by some other
+function or to combine the accelerator and decelerator by a
+subtraction instead of a multiplication.
+
+It also might be possible to use some of the functions previously shown 
+to describe the increment at a specific size simply by exchanging
+time with size. In the equation from
+Backman (eq.~\ref{eq:backman}) and Korsun (eq.~\ref{eq:korsun}) or
+Gram (eq.~\ref{eq:gram}) and Koller (eq.~\ref{eq:koller}) something
+similar is done, as the same function describes once height and some
+other time height increment.
+
+\begin{table*}
+\begin{minipage}[t]{.5\textwidth}
+\begin{align*}
+  \label{eq:linear}
+  h & = c_0 \cdot t & Linear \tag{1.0}\\
+  \label{eq:parabolar}
+  h & = c_0 \cdot t + c_1 \cdot t^2 & Parabola \tag{1.1}\\
+  \label{eq:poly3}
+  h & = c_0 \cdot t + c_1 \cdot t^2 + c_2 \cdot t^3 & Polynom3 \tag{1.2}\\
+  \label{eq:poly4}
+  h & = c_0 \cdot t + c_1 \cdot t^2 + c_2 \cdot t^3 + c_3 \cdot t^4 & Polynom4 \tag{1.3}\\
+  \label{eq:allometric}
+  h & = c_0 \cdot t^{c_1} & Allometric \tag{1.4}\\
+  \label{eq:polyAllo}
+  h & = c_0 \cdot t + c_1 \cdot t^2 + c_2 \cdot t^{c_3} & PolyAllo
+  \tag{1.5}\\[1em]
+  \label{eq:atan}
+  h & = c_0 \cdot \atan^{c_1} (c_2\cdot t^{c_3}) & Atan \tag{2.0}\\
+  \label{eq:tanh}
+  h & = c_0 \cdot \tanh^{c_1} (c_2\cdot t^{c_3}) & Tanh \tag{2.1}\\
+  \label{eq:ln}
+  h & = c_0 \cdot \ln^{c_1} (1 + c_2\cdot t^{c_3}) & Ln \tag{2.2}\\
+  \label{eq:lnFixC1}
+  h & = c_0 \cdot \ln^{c_{1,fix}} (1 + e^{c_2}\cdot t^{c_3}) & LnFixC1 \tag{2.3}\\
+  \label{eq:lnFixC3}
+  h & = c_0 \cdot \ln^{c_1} (1 + e^{c_2}\cdot t^{c_{3,fix}}) & LnFixC3 \tag{2.4}\\
+  \label{eq:lnFixC1C3}
+  h & = c_0 \cdot \ln^{c_{1,fix}} (1 + e^{c_2}\cdot t^{c_{3,fix}}) & LnFixC1C3 \tag{2.5}\\
+  \label{eq:lnFixC1C3Fn}
+  h & = c_0 \cdot \ln^{c_{1,fix}} (1 + e^{c_2}\cdot t^{c_{3,fix} + c_2\cdot c_{4,fix}}) & LnFixC1C3Fn \tag{2.6}\\[1em]
+  \label{eq:terazaki}
+  h & = c_0 \cdot e^{c_1\cdot t^{-1}} & Terazaki \tag{3.0}\\ %Logarithmic
+  \label{eq:terazakiE1}
+  h & = c_0 \cdot e^{c_1\cdot t^{-1} + c_2\cdot t^{-0.5}} & TerazakiE1 \tag{3.1}\\
+  \label{eq:terazakiE2}
+  h & = c_0 \cdot e^{c_1\cdot t^{-0.5} + c_2\cdot t^{c_3}} & TerazakiE2 \tag{3.2}\\
+  \label{eq:korf}
+  h & = c_0 \cdot e^{c_1\cdot t^{c_2}} & Korf \tag{3.3}\\
+  \label{eq:gomperz}
+  h &= c_0 \cdot e^{c_1 \cdot e^{c_2 \cdot t}} & Gompertz \tag{3.4}\\
+  \label{eq:sloboda}
+  h &= c_0 \cdot e^{c_1 \cdot e^{c_2 \cdot t^{c_3}}} & Sloboda \tag{3.5}\\
+  \label{eq:Grosenbaugh}
+  h &= c_0 \cdot (e^{(c_1^2-1) \cdot e^{c_2 \cdot t^{c_3}}} & Grosenbaugh \tag{3.6}\\
+  \nonumber & \qquad - c_1 \cdot e^{c_2 \cdot t^{c_3}})^{c_1*c_4+1}\\
+  \label{eq:korsun}
+  h & = c_0 \cdot e^{c_1 \cdot \ln(t)+c_2 \cdot \ln^2(t)} & Korsun \tag{3.7}\\
+  \label{eq:korsunE1}
+  h & = c_0 \cdot e^{c_1 \cdot \ln(t)+c_2 \cdot \ln^2(t)+c_3 \cdot \ln^4(t)} & KorsunE1 \tag{3.8}\\
+  \label{eq:korsunE2}
+  h & = c_0 \cdot e^{c_1 \cdot \ln(t)+c_2 \cdot \ln^{c3}(t)} & KorsunE2 \tag{3.9}\\[1em]
+  \label{eq:weber}
+  h & = c_0 (1 - e^{c_1 \cdot t} ) & Weber \tag{4.0}\\
+  \label{eq:weberE1}
+  h & = c_0 (1 - e^{c_1 \cdot t} ) \cdot (1 - e^{c_2 \cdot t} ) & WeberE1 \tag{4.1}\\
+  \label{eq:weberE2}
+  h & = c_0 (1 - e^{c_1 \cdot t} ) \cdot (1 - e^{c_2 \cdot t} ) & WeberE2 \tag{4.2}\\
+  \nonumber & \qquad \cdot (1 - e^{c_3 \cdot t} )\\
+  \label{eq:weberE3}
+  h & = c_0 (1 - e^{c_1 \cdot t} ) \cdot (1 - e^{c_2 \cdot t} )^{c_3} & WeberE3 \tag{4.3}\\
+  \label{eq:koevessi1}
+  h &= c_0 \cdot (1 - e^{c_1\cdot t}) + c_2 \cdot (1 - e^{c_3\cdot t}) & \text{K\"ovessi1} \tag{4.4}\\
+  \label{eq:koevessi2}
+  h &= c_0(\frac{1 - e^{-c_1\cdot t}}{c_1} - \frac{1 - e^{-c_2\cdot t}}{c_2}) & \text{K\"ovessi2} \tag{4.5}\\
+%  \label{eq:bertalanffy}
+%  h & = c_0 (1 - e^{c_1 \cdot t} )^{3} & Bertalanffy \tag{1.1}\\
+  \label{eq:mitscherlich}
+  h & = c_0 (1 - e^{c_1 \cdot t} )^{c_2} &
+  Mitscherlich \tag{4.6}\\
+  \label{eq:fischer}
+  h & = c_0 (1 - e^{c_1 \cdot t^{c_3}} ) & Fischer \tag{4.7}\\
+%%  \label{eq:XX} %gleich wie logistic
+%%  h & = c_0 (1 - e^{c_1 \cdot t^{-1}} )^{c_2} & -- \tag{1.4}\\
+  \label{eq:todorovic}
+  h & = c_0 (1 - e^{c_1 \cdot t^{c_3}} )^{c_2} & Todorovic \tag{4.8}\\
+  \label{eq:thomasius}
+  h & = c_0 (1 - e^{c_1 \cdot t \cdot (1 - e ^{c_2 \cdot t})}) &
+  Thomasius \tag{4.9}%\\[1em]
+\end{align*}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+\begin{align*}
+%%  \label{eq:monomolecular}
+%%  h &= c_0 (1-c_4 \cdot e^{c1 \cdot t}) & Monomolecular \tag{1.6}\\
+%%  \label{eq:richards}
+%%  h & = c_0 (1 - {c_4} \cdot e^{c_1 \cdot t} )^{c_2} & Richards \tag{1.7}\\
+%%  \label{eq:weilbull}
+%%  h & = c_0 (1 - {c_4} \cdot e^{c_1 \cdot t^{c_3}} ) & Weilbull \tag{1.8}\\
+%%  \label{eq:XX}
+%%  h & = c_0 (1 - {c_4} \cdot e^{c_1 \cdot t^{c_3}} )^{c_2} & -- \tag{1.9}\\[1.5em]
+  \label{eq:hossfeld3}
+  h & = \frac{c_0 \cdot t}{c_1 + c_2 \cdot \ln(t) + t} & Ho{\ss}feld 3 \tag{5.0}\\
+  \label{eq:hossfeld1}
+  h & = \frac{c_0}{1+c_1 \cdot t^{-1} + c_2 \cdot t^{-2}} & Ho{\ss}feld 1 \tag{5.1}\\
+  \label{eq:hossfeld1E1}
+  h & = \frac{c_0}{1+c_1 \cdot t^{-1} + c_2 \cdot t^{-2} + c_3 \cdot t^{-3}} & Ho{\ss}feld 1E1 \tag{5.2}\\
+  \label{eq:yoschida}
+  h & = \frac{c_0}{1+c_1 \cdot t^{-1} + c_2 \cdot t^{c_3}} & Yoschida \tag{5.3}\\
+%%  \label{eq:stannard}  %Praktisch identisch mit Gompertz
+%%  h &= \frac{c_0}{(1+c_1 \cdot e^{c_2 \cdot t})^{c_3}} & Stannard \tag{5}\\
+  \label{eq:hossfeld4}
+  h & = \frac{c_0}{1 + c_1 \cdot t^{c_2}} & Ho{\ss}feld4 \tag{5.4}\\
+  \label{eq:strand}
+  h & = \frac{c_0}{(1 + c_1 \cdot t^{-1})^{3}} & Strand \tag{5.5}\\
+  \label{eq:levakovic1}
+  h & = \frac{c_0}{(1 + c_1 \cdot t^{-1})^{c_3}} & Levakovic88 \tag{5.6}\\
+  \label{eq:levakovic2}
+  h & = \frac{c_0}{(1 + c_1 \cdot t^{c_2})^{c_3}} &
+  Levakovic159 \tag{5.7}\\[1em]
+  \label{eq:logit}
+  h &= \frac{c_0}{1+c_1 \cdot e^{c_2 \cdot t}} & Logit \tag{6.0}\\
+%  \label{eq:robertson}
+%  h &= c_0 \cdot (1 - \frac{1}{1 + e^{c_1 \cdot (t - c2)}}) & Robertson \tag{55}\\
+  \label{eq:logitE1}
+  h &= c_4 + \frac{c_0}{1+c_1 \cdot e^{c_2 \cdot t^{c_3}}} & LogitE1 \tag{6.1}\\
+  \label{eq:logitE2}
+  h &= c_4 + \frac{c_0}{1+c_1 \cdot e^{c_2 \cdot t + c_3 \cdot t^2}} & LogitE2 \tag{6.2}\\
+  \label{eq:logitE3}
+  h &= \frac{c_0}{1+c_1 \cdot e^{c_2 \cdot \ln(t) + c_3 \cdot \ln^2(t)}} & LogitE3 \tag{6.3}\\
+  \label{eq:nelder}
+  h &= c_4 + \frac{c_0}{(1+c_1 \cdot e^{c_2 \cdot t})^{c_3}} & Nelder \tag{6.4}\\[1em]
+  \label{eq:siven}
+  h & = c_0 \cdot (t/c_1)^{c_2\cdot t^{c_3}} & Siven \tag{7.0}\\
+  \label{eq:gram}
+  h & = c_0 \cdot t^{c_1} \cdot e^{c_2 \cdot t} & Gram \tag{7.1}\\
+  \label{eq:peschel}
+%  h &= c_0 \cdot (1 - e^{-2\frac{t}{c_1}} \cdot (1 + 2\cdot \frac{t}{c_1} + 2\cdot (\frac{t}{c_1})^2)) & Peschel \tag{56}\\
+  h &= c_0 \cdot (1 - e^{-2\frac{t}{c_1}} & Peschel \tag{7.2}\\
+  \nonumber & \qquad \cdot (1 + 2\cdot \frac{t}{c_1} + 2\cdot
+  (\frac{t}{c_1})^2))\\[1em]
+  \label{eq:backman}
+  ih & = c_0 \cdot e^{c_1 \cdot \ln(t)+c_2 \cdot \ln^2(t)} & Backman \tag{8.0}\\
+  \label{eq:backmanE1}
+  ih & = c_0 \cdot e^{c_1 \cdot \ln(t)+c_2 \cdot \ln^2(t) \cdot c_3 \ln^4(t)} & BackmanE1 \tag{8.1}\\
+  \label{eq:koller}
+  ih &= c_0 \cdot t^{c_1} \cdot c_2^{-t} & Koller \tag{8.2}\\
+  \label{eq:levakovicIh}
+  ih &= c_0 \cdot t^{c_1} \cdot c_2^{-t^{c3}} & Levakovic147 \tag{8.3}\\[1em]
+  \label{eq:hyperlogistic}
+  ih &= c_0 \cdot (c_1 + h)^{c_2} \cdot (1-(c_1 + h)/c_3)^{c_4} & Hyperlog \tag{9.0}\\
+  \label{eq:hyperlogisticE1}
+  ih &= (c_1 + c_0 \cdot h^{c_2}) \cdot (1-h/c_3)^{c_4} & HyperlogE1 \tag{9.1}\\
+  \label{eq:hyperlogisticE2}
+  ih &= (c_0 + c_1 \cdot h^{c_2}) \cdot e^{c_3 \cdot h^{c_4}} & HyperlogE2 \tag{9.2}\\
+  \label{eq:hyperlogisticE3}
+  ih &= (c_0 + c_1 \cdot h^{c_2}) \cdot (1/(1 + c_3\cdot h^{c_4})) & HyperlogE3 \tag{9.3}\\
+  \label{eq:hyperlogisticE4}
+  ih &= (c_0 + c_1 \cdot h^{c_2}) \cdot (1 - \tanh(c_3 \cdot h^{c_4})) & HyperlogE4 \tag{9.4}\\
+  \label{eq:hyperlogisticE5}
+  ih &= (c_0 + c_1 \cdot h^{c_2}) \cdot (\frac{\pi}{2} - \atan(c_3\cdot h^{c_4})) & HyperlogE5 \tag{9.5}
+\end{align*}
+\end{minipage}
+\end{table*}
+
+During the comparison it turned out that eq.~\ref{eq:ln} showed good
+results. So this function was further examined. To facilitate the
+parameter estimation $c_2$ can be exchanged with $e^{c_2}$ and the
+function is formulated as $h = c_0\cdot \ln^{c_1}(1 + e^{c_2} \cdot
+t^{c_3})$. In the next step it was tried to keep coefficients constant
+for each of the the two data-set. In eq.~\ref{eq:lnFixC1} $c_1$ and in
+eq.~\ref{eq:lnFixC3} $c_3$ was kept constant. It was also tried to
+keep both coefficients $c_1$ and $c_3$ constant
+(eq.~\ref{eq:lnFixC1C3}). It was also tested if this function, with
+two varying parameters, can be improved by allowing a linear
+dependency of $c_3$ on $c_2$ (eq.~\ref{eq:lnFixC1C3Fn}).
+
+\subsection{Height curve parameter estimation}
+
+The function coefficients are estimated with nonlinear least square
+methods for each single tree using \cite{r2015}. Such methods need
+predefined starting parameters from which their coefficient
+optimisation begins. Bad starting parameters can lead to sub-optimal
+results. Finding one set of starting parameters which will work for
+each single tree might not be possible in each case. When it's
+possible to linearize the equation, individual starting coefficients
+for each tree are used. It's also possible to try a range of different
+starting parameters and select those which have shown the best result. The
+starting parameter search was done with the function {\tt nls2}
+\citep{nls2_2013,proto2012}
+%(packages nls2\_0.2 and proto\_0.3-10)
+using the algorithm {\tt brute-force}. The final coefficient estimates
+have been done with the function {\tt nlsLM} \citep{minpackLm2015}
+with the algorithm {\tt Levenberg-Marquardt}.
+
+Parameter estimation can be hard
+if some of them are correlated or have a huge range of possible
+values. To speed up or enable the algorithm to converge, the equation
+can be reformulated e.g.\ by multiplying one of the coefficients with
+the other and to use the coefficients in a transformed way like $C_0 =
+1/c_0$ or $C_0 = exp(c_0)$.
+
+Sometimes the data-point $t=0$, $h=0$
+makes problems. In these cases this observation was not used. As most
+of the functions meet per definition this point, such a data reduction
+will not influence the coefficient estimates. The estimated
+standard-error will be influenced and needs to be calculated using
+all data. Alternatively this data point ($t=0, h=0$) could be removed
+for all functions, but some functions (e.g.\ Gompertz or Logit) do not
+hit this point. Functions which do not hit the data point ($t=0, h=0$)
+would benefit if this data point would be removed and the relation to
+other functions might be skewed.
+
+All functions which are estimating the increment $ih$ have been
+numerically integrated to a height over age curve. The starting point
+was $t=0$ and $h=0$. $ih$ was not used as the slope of the tangent, it 
+was used as the annual height increment. Coefficients have been
+estimated for least square fit of this height over age curve
+integral. With the present data (age and height) the annual height
+increment could be approximately estimated and used directly in these
+equations. Those coefficients are optimal to estimate, for a given age
+or height, the increment of the next year, but they need not
+automatically be optimal for the resulting growth curve over the whole
+observation time of the tree. As $ih$ was used as the annual height
+increment, those functions need to estimate $ih > 0$ for the
+point where $h=0$.
+
+\subsection{Differences between observation and model}
+
+The RSME between the observed and the estimated
+height was calculated for each tree and each growth function with
+$RSME = \sqrt{\sum_{1}^{n_{obs}} (h_{obs} - h_{est})^2 / (n_{obs} - n_{coef})}$
+where $n_{obs}$ is the number of height observations, $h_{obs}$ is
+the observed heights, $h_{est}$ are the estimated heights and
+$n_{coef}$ are the number of coefficients of the function which is
+estimating $h_{est}$.
+
+%\begin{figure}
+%  \centering
+%  \includegraphics[width=\columnwidth]{./pic/picm1}
+%  \caption{Differences between observation and model on all ages where
+%  height was measured.}
+%  \label{fig:diffAgeMeasured}
+%\end{figure}
+
+The differences between the observed and the estimated height at the
+ages 10, 30, 70, 100 and 150 have been calculated for each tree and
+each growth function. In cases when height was not observed at a given
+age this height was interpolated between the enclosing two data points
+using a spline with the function {\tt splinefun} with method {\tt
+ monoH.FC}.\\ 
+%
+The 0.05, 0.25, 0.5, 0.75 and 0.95 quantile for each function and
+age-step has been calculated. It has been tested if there is a trend
+of the difference of $h_{obs} - h_{est}$ over $h_{est}$ by fitting a
+linear regression for each function and age-step by using the ``High
+Breakdown and High Efficiency Robust Linear Regression'' {\tt lmRob}
+\citep{robust2014}.
+
+%\begin{figure}
+%  \centering
+%  \includegraphics[width=\columnwidth]{./pic/picm2}
+%  \caption{Differences between observation and model at ages 10, 30,
+%    70, 100 and 150 years.}
+%  \label{fig:diffAgeGiven}
+%\end{figure}
+
+\subsection{Height development}
+
+For each tree the height at age 10, 30, 70, 100, 150, 300 and 800
+years was estimated with each function and the tree specific coefficients.
+The 0.05, 0.25, 0.5, 0.75 and 0.95 quantile of those height estimates has
+been calculated for each function and age-step.
+
+
+\section{Results}
+
+\subsection{Root--mean--square error}
+
+For each tree its height at different ages is known. These heights
+are also estimated by the different functions with tree specific
+coefficients. For each tree the RSME between observed
+and estimated heights is calculated. Those RSME have
+been split into seven groups ranging from low to high deviation which
+contain approximately the same count of trees. The number of trees
+which have been classified into those groups are shown in
+figure~\ref{fig:sdRankGutten} for data from Guttenberg and in
+figure~\ref{fig:sdRankBFW} for the data from BFW for all growth
+functions. In addition the median of the RSME has been
+calculated and is given in the figures after the function name.\\
+%
+For the Guttenberg data-set many functions show a RSME
+below $\pm 0.40$\,m and below $\pm 0.50$\,m for the BFW trees.
+The group of the \emph{HyperLog} function, which uses five
+coefficients, can describe the growth pattern of the trees very
+accurately. Also \emph{Ln}, with only four coefficients can be found in
+the middle of this best performing group. This group follows the group of
+functions with four coefficients, where \emph{Hoss1E1},
+\emph{Yoshida}, \emph{Sloboda}, \emph{Atan}, \emph{Tanh},
+\emph{Levakovic159}, \emph{BackmanE1}, \emph{KorsunE1} and
+\emph{Todorovic} are on the upper ranks. From the functions having
+only three parameters \emph{Ho{\ss}feld1}, \emph{Ho{\ss}feld4}, \emph{Korsun},
+\emph{Levakovic88}, \emph{Thomasius}, \emph{Backman} and
+\emph{Mitscherlich} show
+good results. The functions after \emph{WeberE1} for the Guttenberg
+and those after \emph{Korf} for the BFW data-set show not so good
+results.\\
+%
+By keeping the coefficient $c_1$ constant in the \emph{Ln} function
+its RSME is increasing. For the BFW data-set it is better than the
+best three parameter function and for the Guttenberg data-set only
+Backman was slightly better. When keeping $c_3$ constant it is the
+best three parameter function for the Guttenberg data-set but for the
+BFW data it shows similar behaviour like the other three parameter
+functions. When keeping $c_1$ and $c_3$ constant its RSME again is
+increasing but it is better than \emph{Strand}, the best two parameter
+function. Using a linear dependency of $c_3$ on $c_2$ shows only
+marginal improves of the result.
+
+\begin{figure*}[htbp]
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[trim=0 2 0 20,clip,width=\columnwidth]{../pic/sdRankGutten}
+    \caption{Distribution of the root--mean--square error for single trees in meter for the data from Guttenberg.}
+    \label{fig:sdRankGutten}
+\end{minipage}
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[trim=0 2 0 20,clip,width=\columnwidth]{../pic/sdRankBFW}
+    \caption{Distribution of the root--mean--square error single trees in meter for the data from BFW.}
+    \label{fig:sdRankBFW}
+  \end{minipage}
+\end{figure*}
+
+%\FloatBarrier
+
+\subsection{Height difference}
+
+For the ages 10, 30, 70, 100 and 150 the differences between
+observation and model are calculated. Their 0.05, 0.25, 0.5, 0.75 and
+0.95 quantile of all trees for the specific growth function are
+calculated and shown in figure~\ref{fig:hdiffGutten} for the
+Guttenberg and in figure~\ref{fig:hdiffBFW} for the BFW trees. Many
+functions show deviations lower than 0.3\,m for 50\,\% of the trees
+and in the range of 0.6\,m for 90\,\% of the trees.\\
+%
+The group of \emph{hyperlog} functions show the smallest differences
+followed by \emph{Ln}. This group is followed by the functions of
+\emph{Hoss1E1}, \emph{Sloboda}, \emph{Grosenbaugh},
+\emph{Levakovic159}, \emph{KorsunE1}, \emph{Yoshida}, \emph{Atan},
+\emph{Tanh} and \emph{Todorovic}. From the three parameter functions
+\emph{Hossfeld1}, \emph{Backman}, \emph{Thomasius} and
+\emph{Levakovic88} showed the best results.\\
+%
+The height at age~150 shows a tendency to be underestimated from
+nearly all functions for the Guttenberg trees and to be overestimated
+for the BFW
+trees. For the BFW data-set a tendency of overestimation also for the
+age classes 100~years can be seen. The height at the age of 10~years is for both
+data-sets underestimated by many functions. An exception provides the
+group of the \emph{hyperlog} functions which make bias-free estimates
+also for the height at age 10.\\
+%
+Keeping in \emph{Ln} the coefficients $c_1$ or $c_3$ or both constant
+the differences between observed and estimated heights increases. The
+tendency to underestimate the height at age~100 and 150 for Guttenberg
+trees disappear. For the Guttenberg trees the form with constant $c_1$
+and $c_3$ show only for the age 30 years a tendency of
+underestimation, for all other ages the estimates show a smaller bias
+but larger variation than the function without constant coefficients.
+
+\begin{figure*}[htbp]
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hdiffGutten}
+    \caption{Height difference Guttenberg}
+    \label{fig:hdiffGutten}
+  \end{minipage}
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hdiffBFW}
+    \caption{Height difference BFW}
+    \label{fig:hdiffBFW}
+  \end{minipage}
+  \scriptsize{0.05 -- 0.95 (dotted line), 0.25 -- 0.75 (solid line)
+    and 0.5 (vertical mark) quantile of $h_{observed} - h_{estimate}$ in meter
+    for the ages 10 (lowest line), 30, 70, 100 and 150 (top
+    line). Medians outside the shown range are indicated by dots at
+    the border.}
+\end{figure*}
+
+%\FloatBarrier
+
+The slope of the difference between $h_{observed} - h_{estimate}$
+plotted over $h_{estimate}$ is shown in figure~\ref{fig:hdifTrendGut}
+for Guttenberg trees and figure~\ref{fig:hdifTrendBFW} for BFW trees. Nearly
+all functions show a considerable negative trend at age 10 which
+means that trees whose height is estimated low are in reality bigger
+and trees which are estimated to be big are in reality smaller. In
+the higher age classes a slightly positive trend can be seen in the
+Guttenberg data-set and a predominant negative trend in the BFW
+data-set. In the oldest age class (150 years) the estimated slope is
+close to zero but the RSME is bigger than in the other age
+classes. Here the ranking is not so clear as in the previous
+comparisons where the functions with many parameters are better than
+those with fewer. Nevertheless those with 4 to 5 parameters are on the
+better ranks. From those with three parameters \emph{Hossfeld1},
+\emph{Backman}, \emph{Thomasius} and \emph{Levakovic88} showed good
+results. Keeping in \emph{Ln} $c_1$ constant increases the slope
+deviation slightly.
+
+\begin{figure*}[htbp]
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hdifTrendGut}
+    \caption{Trend on height difference with trees from Guttenberg}
+    \label{fig:hdifTrendGut}
+  \end{minipage}
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hdifTrendBFW}
+    \caption{Trend on height difference with trees from BFW}
+    \label{fig:hdifTrendBFW}
+  \end{minipage}
+  \scriptsize{Slope of $h_{observed} - h_{estimate}$  in meter plotted over
+    $h_{estimate}$ for the ages 10 (lowest line), 30, 70, 100 and 150
+    (top line). The small horizontal line indicates the slope
+    estimation and the solid horizontal line range of its
+    root--mean--square error.}
+\end{figure*}
+
+%\FloatBarrier
+
+\subsection{Height development}
+
+In figure~\ref{fig:hDevGut} the 0.05, 0.25, 0.5, 0.75 and 0.95 quantile of
+the estimated height for Guttenberg trees for ages 10, 30, 70,
+100, 150, 300 and 800 years and in figure~\ref{fig:hDevBFW} those for
+BFW trees are shown. The figures are sorted by the median height
+increment between 150 and 800 years. It could be seen that for the
+ages up to 150 years the heights are similar and differences between
+the functions compared to the observations could already be seen in
+figures~\ref{fig:hdiffGutten} and \ref{fig:hdiffBFW}. \emph{HyperLog},
+\emph{Ln} and \emph{Korf} still show some height increment at the
+higher ages. The estimated heights are for those functions still in a
+reasonable range of 40\,m to 80\,m. On the lower end is the
+\emph{Logit} function which shows never negative increments. Negative
+increments have been produced by the functions \emph{Gram},
+\emph{Hoss1E1}, \emph{Hossfeld3}, \emph{Korsun}, \emph{KorsunE1},
+\emph{KorsunE2}, \emph{LogitE2}, \emph{LogitE3}, \emph{Parabola},
+\emph{Poly3}, \emph{Poly4}, \emph{PolyAllo}, \emph{Siven},
+\emph{TerazakiE1} and \emph{TerazakiE2}. The estimated height
+increments between 150 and 300 and also between 300 and 800 years are
+typical in the range of 0\,m to 10\,m which is approximately an annual
+height increment of 5\,cm/year and 1\,cm/year respectively. Keeping in
+\emph{Ln} $c_1$ constant shows for the used data a slightly more
+bend, and keeping $c_3$ constant a slightly more straightened height
+development compared the the unrestricted function.
+
+\begin{figure*}[htbp]
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hDevGut}
+    \caption{Height for ages 10, 30, 70, 100, 150, 300 and
+      800 with Guttenberg data.}
+    \label{fig:hDevGut}
+  \end{minipage}
+  \begin{minipage}{.49\linewidth}
+    \centering
+    \includegraphics[width=\columnwidth]{../pic/hDevBFW}
+    \caption{Height for ages 10, 30, 70, 100, 150, 300 and
+      800 with BFW data.}
+    \label{fig:hDevBFW}
+  \end{minipage}
+  \scriptsize{0.05 -- 0.95 (dotted line), 0.25 -- 0.75 (solid line)
+    and 0.5 (vertical mark) quantile of $h_{estimate}$ in meter
+    for the ages 10 (lowest line), 30, 70, 100, 150, 300 and 800 (top
+    line). Medians outside the shown range are indicated by dots at
+    the border.}
+\end{figure*}
+
+%\FloatBarrier
+
+
+\section{Discussion}
+
+After comparing several functions it is not possible to select
+\emph{the best} one. Especially those with more than three coefficients
+are flexible and show very similar shapes. For functions with less
+than three parameters their coefficients are easily estimated but they
+are not so flexible and show larger deviation from the observed growth
+pattern. Some functions with three parameters (\emph{Hossfeld1},
+\emph{Backman}, \emph{Thomasius}, \emph{Levakovic88}) show acceptable
+fits. Functions with four parameters show good results. The tested
+functions with five parameters show only marginal
+improvements. Typically one of the functions with four parameters should
+be used. The final decision depends on whether the parameter
+estimation converges, the parameters can be interpreted directly
+(e.g.\ height at a specific age) or the function can be transformed to
+show either height depending on age or estimate age as a function of
+height.
+
+Sometimes from growth functions, which describe height over age, the
+first derivation can be built or functions are directly formulated as
+differential equations which describe the slope of the increment at a
+given age or tree size. This slope is not identical with the annual
+increment. It seems admissible to use those differential functions to
+estimate differences instead of differentials. But then it is
+important to define for which time span this increment is estimated.
+If the time span of the observed increments is a multiple of the
+function time span, the function needs to be used recursively. Only
+for linear functions the increments can be adjusted with a
+multiplication of (time span function) / (time span observation).
+However, this simple increment adjustment can be used to find starting
+parameters either for the recursive function call or the integral
+function form.
+
+Tests, whether differences between the functions are significant or
+not, have not not been made, as the differences between the functions
+should have practical relevance and not statistical significance. If
+the difference between two height growth functions is statistically
+significant, but the difference is in a range of practical
+irrelevance, I would recommend to choose the simpler function. Also
+the criterion if the difference is significant or not depends beside
+the selected significance level on the attributes of subsample and
+its size. The influence of different samples on the function ranking
+by the applied methods is shown by using the two different height
+growth data sets. There is no need that a function showing good
+results on the used data sets is also good on other data sets. To find
+the functions which can follow the growth pattern in a good way on a
+different data set, all functions need to be tested. But it can
+be expected that functions with low deviations on the two
+data sets used here show also good behaviour on comparable data sets.
+
+For the function $h = c_0 \cdot \ln^{c_1} (1 + c_2\cdot t^{c_3})$ it
+was tried to keep up to two coefficients constant for each
+data-set. This reduces the flexibility of the function. Keeping $c_1$
+constant shows for both data-sets good results which are close to the
+best or better than the best three parameter function. Keeping $c_3$
+constant shows good results for the Guttenberg trees. When holding
+$c_1$ and $c_3$ constant the deviation comes close to the range from
+acceptable to unacceptable but is still better than any of the tested
+two parameter functions. It could be expected, that keeping
+coefficients constant, but estimating it optimal for the used
+data-set, should result in better results than functions which do not
+have, or set some coefficients to a data independent fixed value.
+
+If the linear intercorrelation between the coefficients makes it
+difficult, for the used algorithm, to find optimal parameters the
+formulations
+$h = c_0\cdot \ln^\frac{c_1}{c_2}(1 + e^{c_2} \cdot t^{c_2 \cdot c_3})$,
+$h = c_0 \cdot \frac{\ln^{c_1} (1 +  c_2\cdot t^{c_3})} {\ln^{c_1} (1 + c_2\cdot 100^{c_3})}$
+or
+$h = c_0\cdot \frac{\ln^\frac{c_1}{c_2}(1 + e^{c_2} \cdot t^{c_2 \cdot c_3})} {\ln^\frac{c_1}{c_2}(1 + e^{c_2} \cdot 100^{c_2 \cdot c_3})}$
+could be tried, which have reduced the coefficient
+intercorrelation for the used data-sets. Those are only alternative
+formulations of the \emph{Ln} function which might help the solver,
+but will not change the shape of the resulting curve. The last two
+forms make $c_0$ equal with the height at age 100.
+
+\section{Conclusions}
+
+From the examined 55 functions
+$h  = c_0 \cdot \ln^{c_1} (1 + c_2\cdot t^{c_3})$
+showed good behaviour and might be one which could be recommended.
+Only for the young
+ages, around 10~years their height is underestimated. The group of
+\emph{Hyper-Logistic} functions dose not show this weakness. But they
+need an additional parameter and can directly show only the increments
+over height. The differences to functions like \emph{Sloboda},
+\emph{Todorovic}, \emph{Levakovic159}, \emph{Grosenbaugh}, \emph{Tanh}
+and \emph{Atan} are marginal. From the three parameter functions
+\emph{Hossfeld1}, \emph{Backman}, \emph{Thomasius} and
+\emph{Levakovic88} showed good results.\\[1em]
+
+%\begin{acknowledgements}
+Many thanks to Thomas Ledermann and Markus Neumann for their
+constructive comments, Margareta Khorchidi for proof reading and
+Hubert Sterba and Hubert Hasenauer for reviewing the manuscript.
+%\end{acknowledgements}
+
+%\subsection{Funding}
+
+\bibliography{lit}
+\bibliographystyle{plainnat}
+
+\end{document}
