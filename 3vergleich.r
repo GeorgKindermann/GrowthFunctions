@@ -67,12 +67,13 @@ for(fktName in names(res)) {
 }
 #Median und Perzentillen (5%, 25%)
 t2 <- aggregate(val ~ fun + age, data=t1[t1$src=="gut",], quantile, probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
-t2$fun <- factor(t2$fun, levels = sort(levels(t2$fun), decreasing=T))
+#t2$fun <- factor(t2$fun, levels = sort(levels(t2$fun), decreasing=T))
+t2$fun <- factor(t2$fun, levels = sort(unique(t2$fun), decreasing=T))
 t2 <- data.frame(t2[,1:2], t2$val)
 #t3 <- aggregate(X50. ~ fun, data=t2, function(x) {sum(abs(x))})
 #t3 <- data.frame(fun=t3$fun[order(t3$X50.)], line=NROW(t3):1)
-t3 <- sort(data.frame(rbind(by(t2, t2$fun, function(x) {sum(abs(x$X25.)+abs(x$X75.))}))))
-t3 <- data.frame(fun=colnames(t3), line=length(t3):1 * ys)
+t3 <- sort(unlist(data.frame(rbind(by(t2, t2$fun, function(x) {sum(abs(x$X25.)+abs(x$X75.))})))))
+t3 <- data.frame(fun=names(t3), line=length(t3):1 * ys)
 t2 <- merge(t2, t3)
 pdf("./pic/hdiffGutten.pdf", width=8, height=14.6, pointsize=20)
 par(mar=c(2,7,0.1,0.1), xaxs="i")
@@ -91,10 +92,10 @@ for(i in 1:length(ageSteps)) {
 dev.off()
 #
 t2 <- aggregate(val ~ fun + age, data=t1[t1$src=="jrm",], quantile, probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
-t2$fun <- factor(t2$fun, levels = sort(levels(t2$fun), decreasing=T))
+t2$fun <- factor(t2$fun, levels = sort(unique(t2$fun), decreasing=T))
 t2 <- data.frame(t2[,1:2], t2$val)
-t3 <- sort(data.frame(rbind(by(t2, t2$fun, function(x) {sum(abs(x$X25.)+abs(x$X75.))}))))
-t3 <- data.frame(fun=colnames(t3), line=length(t3):1 * ys)
+t3 <- sort(unlist(data.frame(rbind(by(t2, t2$fun, function(x) {sum(abs(x$X25.)+abs(x$X75.))})))))
+t3 <- data.frame(fun=names(t3), line=length(t3):1 * ys)
 t2 <- merge(t2, t3)
 pdf("./pic/hdiffBFW.pdf", width=8, height=14.6, pointsize=20)
 par(mar=c(2,7,0.1,0.1), xaxs="i")
@@ -138,8 +139,8 @@ for(i in names(t3)) {
 colnames(t5) <- c("fun", "age", "val", "se")
 t5$fun <- factor(t5$fun, levels = sort(unique(t5$fun), decreasing=T))
 t5$age <- as.numeric(t5$age)
-t6 <- sort(data.frame(rbind(by(t5[t5$age>10,], t5$fun[t5$age>10], function(x) {sum(abs(x$val)+x$se/2)}))))
-t6 <- data.frame(fun=colnames(t6), line=length(t6):1 * ys)
+t6 <- sort(unlist(data.frame(rbind(by(t5[t5$age>10,], t5$fun[t5$age>10], function(x) {sum(abs(x$val)+x$se/2)})))))
+t6 <- data.frame(fun=names(t6), line=length(t6):1 * ys)
 t5 <- merge(t5, t6)
 #
 pdf("./pic/hdifTrendGut.pdf", width=8, height=14.6, pointsize=20)
@@ -169,8 +170,8 @@ for(i in names(t3)) {
 colnames(t5) <- c("fun", "age", "val", "se")
 t5$fun <- factor(t5$fun, levels = sort(unique(t5$fun), decreasing=T))
 t5$age <- as.numeric(t5$age)
-t6 <- sort(data.frame(rbind(by(t5[t5$age>10,], t5$fun[t5$age>10], function(x) {sum(abs(x$val)+x$se/2)}))))
-t6 <- data.frame(fun=colnames(t6), line=length(t6):1 * ys)
+t6 <- sort(unlist(data.frame(rbind(by(t5[t5$age>10,], t5$fun[t5$age>10], function(x) {sum(abs(x$val)+x$se/2)})))))
+t6 <- data.frame(fun=names(t6), line=length(t6):1 * ys)
 t5 <- merge(t5, t6)
 #
 pdf("./pic/hdifTrendBFW.pdf", width=8, height=14.6, pointsize=20)
@@ -203,7 +204,7 @@ for(fktName in names(res)) {
 }
 #Median und Perzentillen (5%, 25%) - Guttenberg
 t2 <- aggregate(h ~ fun + age, data=t1[t1$src=="gut",], quantile, probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
-t2$fun <- factor(t2$fun, levels = sort(levels(t2$fun), decreasing=T))
+t2$fun <- factor(t2$fun, levels = sort(unique(t2$fun), decreasing=T))
 colnames(t2)[3] <- "val"
 t2 <- data.frame(t2[,1:2], t2$val)
 t3 <- data.frame(fun = t2$fun[t2$age==800][order(t2$X50.[t2$age==800] - t2$X50.[t2$age==150])], line=1:nlevels(t2$fun) * ys)
@@ -227,7 +228,7 @@ for(i in 1:length(ageSteps)) {
 dev.off()
 #BFW
 t2 <- aggregate(h ~ fun + age, data=t1[t1$src=="jrm",], quantile, probs=c(0.05, 0.25, 0.5, 0.75, 0.95))
-t2$fun <- factor(t2$fun, levels = sort(levels(t2$fun), decreasing=T))
+t2$fun <- factor(t2$fun, levels = sort(unique(t2$fun), decreasing=T))
 colnames(t2)[3] <- "val"
 t2 <- data.frame(t2[,1:2], t2$val)
 t3 <- data.frame(fun = t2$fun[t2$age==800][order(t2$X50.[t2$age==800] - t2$X50.[t2$age==150])], line=1:nlevels(t2$fun)*ys)
